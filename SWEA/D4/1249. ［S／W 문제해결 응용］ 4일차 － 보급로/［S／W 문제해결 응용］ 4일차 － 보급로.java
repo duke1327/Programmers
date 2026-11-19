@@ -74,10 +74,10 @@ class Solution
                 }
             }
             
-            System.out.println("#" + test_case + " " + bfs());
+            System.out.println("#" + test_case + " " + dijkstra());
 		}
 	}
-    
+    /*
     static int bfs() {
         dist = new int[n][n];
         for(int[] row : dist) {
@@ -105,6 +105,37 @@ class Solution
             }
         }
         
+        return dist[n - 1][n - 1];
+    }
+    */
+    
+    static int dijkstra() {
+        dist = new int[n][n];
+        for (int[] row : dist) Arrays.fill(row, Integer.MAX_VALUE);
+
+        PriorityQueue<int[]> pq = new PriorityQueue<>((a, b) -> a[2] - b[2]);
+        dist[0][0] = 0;
+        pq.add(new int[]{0, 0, 0});
+
+        while (!pq.isEmpty()) {
+            int[] cur = pq.poll();
+            int r = cur[0], c = cur[1], w = cur[2];
+
+            if (w > dist[r][c]) continue;
+            if (r == n - 1 && c == n - 1) return w;
+
+            for (int d = 0; d < 4; d++) {
+                int nr = r + dr[d];
+                int nc = c + dc[d];
+                if (nr < 0 || nr >= n || nc < 0 || nc >= n) continue;
+
+                int cost = w + map[nr][nc];
+                if (cost < dist[nr][nc]) {
+                    dist[nr][nc] = cost;
+                    pq.add(new int[]{nr, nc, cost});
+                }
+            }
+        }
         return dist[n - 1][n - 1];
     }
 }
